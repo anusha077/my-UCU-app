@@ -8,11 +8,13 @@ from googleapiclient.http import MediaFileUpload
 import os
 import tempfile
 from datetime import datetime
+import json
 
 # Define the scope and credentials path
 SCOPE = ['https://www.googleapis.com/auth/drive']
-credentials_path = "C:/Users/anush/Downloads/UI UCU/ucu-project-441712-349dbb9b0a16.json"
-creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_path, SCOPE)
+credentials_path = st.secrets["google"]["GOOGLE_CREDENTIALS"]
+creds_dict = json.loads(credentials_path)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, SCOPE)
 CLIENT = gspread.authorize(creds)
 folder_id = "1HifJfkEqrqvoRz9uPXkOAiF-Wy9VZUfr"  # Replace with your folder ID
 
