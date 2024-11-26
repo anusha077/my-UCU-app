@@ -10,13 +10,20 @@ import tempfile
 from datetime import datetime
 import json
 
-# Define the scope and credentials path
+
+# Define the scope
 SCOPE = ['https://www.googleapis.com/auth/drive']
+
+# Load credentials from Streamlit secrets
 credentials_path = st.secrets["google"]["GOOGLE_CREDENTIALS"]
 creds_dict = json.loads(credentials_path)
+
+# Authorize using the credentials
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, SCOPE)
 CLIENT = gspread.authorize(creds)
-folder_id = "1HifJfkEqrqvoRz9uPXkOAiF-Wy9VZUfr"  # Replace with your folder ID
+
+# Use your folder ID
+folder_id = "1HifJfkEqrqvoRz9uPXkOAiF-Wy9VZUfr"
 
 def upload_to_drive(uploaded_file_path, file_name, folder_id):
     try:
