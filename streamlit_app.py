@@ -203,11 +203,11 @@ def main():
             st.download_button(
                 label="Download CSV",
                 data=open(temp_file_path, 'rb').read(),
-                file_name=f"UCU_{datetime.now().strftime('%m_%d_%Y')}.csv",
+                file_name=f"UCU_{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.csv",
                 mime="text/csv"
             )
             # Upload to Google Drive
-            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime('%m_%d_%Y')}.csv", folder_id)
+            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.csv", folder_id)
             if file_id:
                 st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
 
