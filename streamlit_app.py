@@ -10,7 +10,6 @@ import tempfile
 from datetime import datetime
 import json
 
-
 # Define the scope
 SCOPE = ['https://www.googleapis.com/auth/drive']
 
@@ -97,7 +96,7 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
     # Process each school sheet
     for sheet_name, school in schools:
         outreach_df = pd.read_excel(member_outreach_file, sheet_name=sheet_name)
-        event_df = pd.read_excel(event_debrief_file)
+        event_df = pd.read_excel(event_debrief_file,skiprows=1)
 
         outreach_df.columns = [f'outreach_{col}' for col in outreach_df.columns]
         outreach_df['outreach_Growth Officer'] = outreach_df['outreach_Growth Officer'].replace(growth_officer_mapping)
