@@ -202,7 +202,9 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         temp_csv_path = temp_csv.name
 
     return final_df_cleaned, temp_csv_path
-
+# Streamlit app UI
+def main():
+    st.title("File Upload and Processing")
  # File upload
     member_outreach_file = st.file_uploader("Upload Member Outreach File (CSV/XLSX)", type=["csv", "xlsx"])
     event_debrief_file = st.file_uploader("Upload Event Debrief File (CSV/XLSX)", type=["csv", "xlsx"])
