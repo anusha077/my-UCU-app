@@ -12,3 +12,4 @@ google-auth==2.36.0
 pydeck==0.9.1
 markdown-it-py==3.0.0
 pytz
+openpyxl
