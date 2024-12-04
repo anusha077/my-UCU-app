@@ -171,6 +171,15 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
     cleaned_data = combined_data.drop_duplicates(
         subset=['memberName', 'applicationStartDate', 'applicationSubmittedDate', 'applicationApprovalDate', 'status']
     )
+     # Add creation of the 'School Affiliation' column
+    cleaned_data['Affiliation'] = cleaned_data['What is your affiliation?'].fillna('') + ' ' + \
+                                         cleaned_data['What organization are you affiliated with?'].fillna('') + ' ' + \
+                                         cleaned_data['What university do you attend?'].fillna('') + ' ' + \
+                                         cleaned_data['Who is your employer?'].fillna('')
+
+    # Remove extra spaces and trim the new 'School Affiliation' column
+    cleaned_data['Affiliation'] = cleaned_data['Affiliation'].str.strip()
+
     cleaned_data = cleaned_data.rename(columns={col: f'submitted_{col}' for col in cleaned_data.columns})
 
     final_df_cleaned = pd.merge(final_df, cleaned_data, left_on='outreach_Name', right_on='submitted_memberName', how='left')
