@@ -177,6 +177,7 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
     cleaned_data['Affiliation'] = cleaned_data['What is your affiliation?'].fillna('') + ' ' + \
                                          cleaned_data['What organization are you affiliated with?'].fillna('') + ' ' + \
                                          cleaned_data['What university do you attend?'].fillna('') + ' ' + \
+                                         cleaned_data['What is the affiliation of your family member?'].fillna('') + ' ' + \
                                          cleaned_data['Who is your employer?'].fillna('')
 
     # Remove extra spaces and trim the new 'School Affiliation' column
