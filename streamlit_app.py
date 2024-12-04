@@ -45,7 +45,16 @@ def upload_to_drive(uploaded_file_path, file_name, folder_id):
         st.error(f"Failed to upload file: {e}")
         print(f"Error: {e}")
         return None, None
-
+        
+# Function to read files (CSV or XLSX)
+def read_file(file):
+    if file.name.endswith('.csv'):
+        return pd.read_csv(file)
+    elif file.name.endswith('.xlsx'):
+        return pd.ExcelFile(file)
+    else:
+        st.error("Unsupported file type! Please upload a CSV or XLSX file.")
+        return None
 
 # Function to process uploaded files
 def process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file):
@@ -194,18 +203,26 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
 
     return final_df_cleaned, temp_csv_path
 
-# Streamlit app UI
-def main():
-    st.title("File Upload and Processing")
-    
-    # File upload
-    member_outreach_file = st.file_uploader("Upload Member Outreach File", type="xlsx")
-    event_debrief_file = st.file_uploader("Upload Event Debrief File", type="xlsx")
-    submitted_file = st.file_uploader("Upload Submitted File", type="xlsx")
-    approved_file = st.file_uploader("Upload Approved File", type="xlsx")
+ # File upload
+    member_outreach_file = st.file_uploader("Upload Member Outreach File (CSV/XLSX)", type=["csv", "xlsx"])
+    event_debrief_file = st.file_uploader("Upload Event Debrief File (CSV/XLSX)", type=["csv", "xlsx"])
+    submitted_file = st.file_uploader("Upload Submitted File (CSV/XLSX)", type=["csv", "xlsx"])
+    approved_file = st.file_uploader("Upload Approved File (CSV/XLSX)", type=["csv", "xlsx"])
     
     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
         if st.button("Clean Data"):
+            # Read uploaded files
+            member_outreach_data = read_file(member_outreach_file)
+            event_debrief_data = read_file(event_debrief_file)
+            submitted_data = read_file(submitted_file)
+            approved_data = read_file(approved_file)
+
+            # Validate that files were read correctly
+            if member_outreach_data is None or event_debrief_data is None or submitted_data is None or approved_data is None:
+                st.error("One or more files could not be read. Please check your uploads.")
+                return
+
+            # Process files
             result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
             st.success("Data cleaned successfully!")
             st.write(result_df)
@@ -218,14 +235,8 @@ def main():
                 file_name=f"UCU_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv"
             )
-            # Get the current date and time in UTC
-            now_utc = datetime.now(pytz.utc)  
-
-            # Convert to Pacific Time
-            now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
-
             # Upload to Google Drive
-            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv", folder_id)
+            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", folder_id)
             if file_id:
                 st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
 
