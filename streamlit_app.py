@@ -52,7 +52,11 @@ def read_file(file):
     if file.name.endswith('.csv'):
         return pd.read_csv(file)
     elif file.name.endswith('.xlsx'):
-        return pd.ExcelFile(file, engine='openpyxl')
+        try:
+            return pd.ExcelFile(file, engine='openpyxl')
+        except Exception as e:
+            st.error(f"Error reading Excel file: {e}")
+            return None
     else:
         st.error("Unsupported file type! Please upload a CSV or XLSX file.")
         return None
