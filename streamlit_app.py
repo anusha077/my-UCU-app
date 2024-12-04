@@ -9,6 +9,8 @@ import os
 import tempfile
 from datetime import datetime
 import json
+from datetime import datetime
+import pytz
 
 # Define the scope
 SCOPE = ['https://www.googleapis.com/auth/drive']
@@ -212,9 +214,15 @@ def main():
             st.download_button(
                 label="Download CSV",
                 data=open(temp_file_path, 'rb').read(),
-                file_name=f"UCU_{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.csv",
+                file_name=f"UCU_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv"
             )
+            # Get the current date and time in UTC
+            now_utc = datetime.now(pytz.utc)  
+
+            # Convert to Pacific Time
+            now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
+
             # Upload to Google Drive
             file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv", folder_id)
             if file_id:
