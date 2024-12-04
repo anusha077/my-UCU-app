@@ -216,7 +216,7 @@ def main():
                 mime="text/csv"
             )
             # Upload to Google Drive
-            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.csv", folder_id)
+            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv", folder_id)
             if file_id:
                 st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
 
