@@ -49,7 +49,8 @@ def read_file(uploaded_file, file_label):
         if uploaded_file.name.endswith(".csv"):
             return pd.read_csv(uploaded_file)
         elif uploaded_file.name.endswith(".xlsx"):
-            excel_data = pd.ExcelFile(uploaded_file)
+            # Try reading with openpyxl engine
+            excel_data = pd.ExcelFile(uploaded_file, engine='openpyxl')
             if len(excel_data.sheet_names) == 0:
                 raise ValueError(f"No worksheets found in the file '{file_label}'.")
             # Read the first sheet by index (index 0)
