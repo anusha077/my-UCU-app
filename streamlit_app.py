@@ -44,19 +44,19 @@ def upload_to_drive(uploaded_file_path, file_name, folder_id):
         st.error(f"Failed to upload file: {e}")
         return None, None
 
-def read_file(uploaded_file):
+def read_file(uploaded_file, file_name):
     try:
         if uploaded_file.name.endswith('.csv'):
             return pd.read_csv(uploaded_file)
         elif uploaded_file.name.endswith('.xlsx'):
             return pd.read_excel(uploaded_file, engine='openpyxl')
         else:
-            st.error("Unsupported file format. Please upload a CSV or XLSX file.")
+            st.error(f"Unsupported file format for {file_name}. Please upload a CSV or XLSX file.")
             return None
     except Exception as e:
-        st.error(f"Error reading the file: {e}")
+        st.error(f"Error reading the file '{file_name}': {e}")
         return None
-
+        
 def process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file):
     try:
         # Schools mapping
@@ -178,13 +178,13 @@ def main():
     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
         if st.button("Clean Data"):
             # Read uploaded files
-            member_outreach_data = read_file(member_outreach_file)
-            event_debrief_data = read_file(event_debrief_file)
-            submitted_data = read_file(submitted_file)
-            approved_data = read_file(approved_file)
+            member_outreach_data = read_file(member_outreach_file, "Member Outreach File")
+            event_debrief_data = read_file(event_debrief_file, "Event Debrief File")
+            submitted_data = read_file(submitted_file, "Submitted File")
+            approved_data = read_file(approved_file, "Approved File")
 
             # Validate that files were read correctly
-            if member_outreach_data is None or event_debrief_data is None or submitted_data is None or approved_data is None:
+            if None in [member_outreach_data, event_debrief_data, submitted_data, approved_data]:
                 st.error("One or more files could not be read. Please check your uploads.")
                 return
 
