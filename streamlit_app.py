@@ -44,16 +44,17 @@ def upload_to_drive(uploaded_file_path, file_name, folder_id):
         st.error(f"Failed to upload file: {e}")
         return None, None
 
-def read_file(file):
+def read_file(uploaded_file):
     try:
-        if file.name.endswith('.csv'):
-            return pd.read_csv(file)
-        elif file.name.endswith('.xlsx'):
-            return pd.ExcelFile(file, engine='openpyxl')
+        if uploaded_file.name.endswith('.csv'):
+            return pd.read_csv(uploaded_file)
+        elif uploaded_file.name.endswith('.xlsx'):
+            return pd.read_excel(uploaded_file, engine='openpyxl')
         else:
-            raise ValueError("Unsupported file type! Please upload a CSV or XLSX file.")
+            st.error("Unsupported file format. Please upload a CSV or XLSX file.")
+            return None
     except Exception as e:
-        st.error(f"Error reading file {file.name}: {e}")
+        st.error(f"Error reading the file: {e}")
         return None
 
 def process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file):
