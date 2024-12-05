@@ -52,7 +52,8 @@ def read_file(uploaded_file, file_label):
             excel_data = pd.ExcelFile(uploaded_file)
             if len(excel_data.sheet_names) == 0:
                 raise ValueError(f"No worksheets found in the file '{file_label}'.")
-            return excel_data.parse(sheet_name=0)  # Read the first sheet
+            # Read the first sheet by index (index 0)
+            return excel_data.parse(0)  # 0 refers to the first sheet
         else:
             raise ValueError(f"Unsupported file type for '{file_label}'. Please upload a CSV or Excel file.")
     except Exception as e:
