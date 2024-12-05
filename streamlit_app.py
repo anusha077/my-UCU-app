@@ -184,7 +184,7 @@ def main():
             approved_data = read_file(approved_file, "Approved File")
 
             # Validate that files were read correctly
-            if None in [member_outreach_data, event_debrief_data, submitted_data, approved_data]:
+            if any(data is None for data in [member_outreach_data, event_debrief_data, submitted_data, approved_data]):
                 st.error("One or more files could not be read. Please check your uploads.")
                 return
 
