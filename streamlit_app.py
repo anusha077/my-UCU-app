@@ -28,17 +28,26 @@ def upload_to_drive(uploaded_file_path, file_name, folder_id):
     try:
         drive_service = build('drive', 'v3', credentials=creds)
         
-        # File metadata for Google Drive
-        file_metadata = {
-            'name': file_name,
-            'parents': [folder_id]
-        }
-        media = MediaFileUpload(uploaded_file_path, mimetype='text/csv')
-        print(f"Uploading file: {file_name} to Google Drive")
-        file = drive_service.files().create(body=file_metadata, media_body=media, fields='id, webViewLink').execute()
-        print(f"File uploaded successfully: {file}")
-        
-        return file.get('id'), file.get('webViewLink')
+        # Search for an existing file with the same name in the specified folder
+        query = f"name='{file_name}' and '{folder_id}' in parents and trashed=false"
+        results = drive_service.files().list(q=query, fields="files(id, name)").execute()
+        existing_files = results.get('files', [])
+
+        if existing_files:
+            # If the file exists, update it
+            file_id = existing_files[0]['id']
+            media = MediaFileUpload(uploaded_file_path, mimetype='text/csv')
+            updated_file = drive_service.files().update(fileId=file_id, media_body=media).execute()
+            return updated_file.get('id'), f"https://drive.google.com/file/d/{updated_file.get('id')}/view"
+        else:
+            # If the file doesn't exist, create a new one
+            file_metadata = {
+                'name': file_name,
+                'parents': [folder_id]
+            }
+            media = MediaFileUpload(uploaded_file_path, mimetype='text/csv')
+            new_file = drive_service.files().create(body=file_metadata, media_body=media, fields='id, webViewLink').execute()
+            return new_file.get('id'), f"https://drive.google.com/file/d/{new_file.get('id')}/view"
     except Exception as e:
         st.error(f"Failed to upload file: {e}")
         print(f"Error: {e}")
@@ -244,6 +253,10 @@ def main():
             file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv", folder_id)
             if file_id:
                 st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
+            # Save another copy with a fixed name
+            file_id_2, file_link_2 = upload_to_drive(temp_file_path, "UCU_Dashboard_linked.csv", folder_id)
+            if file_id_2:
+                st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
 
 if __name__ == "__main__":
     main()
