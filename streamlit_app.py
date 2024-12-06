@@ -170,10 +170,7 @@ def update_from_approved(row):
         st.error(f"An error occurred while processing the row: {e}")
         return row  # Return the row even if there's an error
 
-try:
-    combined_data = combined_data.apply(update_from_approved, axis=1)
-except Exception as e:
-    st.error(f"An error occurred while updating from approved data: {e}")
+combined_data = combined_data.apply(update_from_approved, axis=1)
 
 # Drop duplicates based on key columns
 cleaned_data = combined_data.drop_duplicates(
