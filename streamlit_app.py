@@ -180,7 +180,10 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         if row['status'] == 'Approved' and row['memberName'] in approved_df['memberName'].values:
             match = approved_df.loc[approved_df['memberName'] == row['memberName']]
             if not match.empty:
-                row.update(match.iloc[0])
+                row['autoApproved'] = match['autoApproved'].values[0]
+                row['funded'] = match['funded'].values[0] if 'funded' in match.columns else None
+                row['bankingAccessed'] = match['bankingAccessed'].values[0] if 'bankingAccessed' in match.columns else None
+                row['directDepositAttempted'] = match['directDepositAttempted'].values[0] if 'directDepositAttempted' in match.columns else None
         return row
 
     combined_data = combined_data.apply(update_from_approved, axis=1)
@@ -210,12 +213,12 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
 # Streamlit app UI
 def main():
     st.title("File Upload and Processing")
-    
-    # File upload
-    member_outreach_file = st.file_uploader("Upload Member Outreach File", type="xlsx")
-    event_debrief_file = st.file_uploader("Upload Event Debrief File", type="xlsx")
-    submitted_file = st.file_uploader("Upload Submitted File", type="xlsx")
-    approved_file = st.file_uploader("Upload Approved File", type="xlsx")
+    st.write("Please submit the following files and make sure they are in the correct format: CSV and/or XLSX only.")
+     # File upload
+    member_outreach_file = st.file_uploader("Upload Member Outreach File (CSV/XLSX)", type=["csv", "xlsx"])
+    event_debrief_file = st.file_uploader("Upload Event Debrief File (CSV/XLSX)", type=["csv", "xlsx"])
+    submitted_file = st.file_uploader("Upload Submitted File (CSV/XLSX)", type=["csv", "xlsx"])
+    approved_file = st.file_uploader("Upload Approved File (CSV/XLSX)", type=["csv", "xlsx"])
     
     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
         if st.button("Clean Data"):
