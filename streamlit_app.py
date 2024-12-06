@@ -137,22 +137,31 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
                         closest_event = event_row
 
             if closest_event is not None:
-                final_outreach_df.at[i, 'outreach_event_name'] = closest_event['Event Name']
+                outreach_df.at[i, 'outreach_event_name'] = closest_event['Event Name']
+                for col in event_columns:
+                    outreach_df.at[i, renamed_event_columns[col]] = closest_event[col]
 
+                if pd.isna(outreach_df.at[i, 'outreach_Growth Officer']):
+                    outreach_df.at[i, 'outreach_Growth Officer'] = closest_event['Name']
+
+        outreach_df = outreach_df.dropna(subset=['outreach_Growth Officer'])
+        outreach_df = outreach_df.dropna(subset=['outreach_event_name'])
+
+        outreach_dfs.append(outreach_df)
+
+    final_df = pd.concat(outreach_dfs, ignore_index=True)
+    final_df = final_df.dropna(subset=['outreach_Date'])
+                    
         # Load and merge submitted and approved data
-        submitted_df = pd.read_excel(submitted_file)
-        approved_df = pd.read_excel(approved_file)
+    submitted_df = pd.read_excel(submitted_file)
+    approved_df = pd.read_excel(approved_file)
+    approved_df['status'] = 'Approved'
+    submitted_df['autoApproved'] = submitted_df['status'].apply(
+        lambda x: 'Yes' if x == 'Auto Approved' else ('No' if x == 'Approved' else '')
+    )
+    submitted_df['status'] = submitted_df['status'].replace('Auto Approved', 'Approved')
+    combined_data = pd.concat([submitted_df, approved_df], ignore_index=True)
 
-        approved_df['status'] = 'Approved'
-        submitted_df['autoApproved'] = submitted_df['status'].apply(
-            lambda x: 'Yes' if x == 'Auto Approved' else 'No'
-        )
-        submitted_df['status'] = submitted_df['status'].replace('Auto Approved', 'Approved')
-
-        combined_data = pd.concat([submitted_df, approved_df], ignore_index=True)
-        # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
-
-    # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
     # Function to update columns based on approved data
     def update_from_approved(row):
         if row['status'] == 'Approved' and row['memberName'] in approved_df['memberName'].values:
