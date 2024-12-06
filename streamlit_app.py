@@ -226,5 +226,4 @@ def main():
             if file_id:
                 st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
 
-if _name_ == "_main_":
-    main()
+if __name__ == "__main__":
