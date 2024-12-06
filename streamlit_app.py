@@ -65,7 +65,6 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
     try:
         # Processing logic remains unchanged
         pass
-
 def main():
     st.title("UCU File Uploader")
 
