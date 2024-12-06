@@ -152,7 +152,7 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         combined_data = pd.concat([submitted_df, approved_df], ignore_index=True)
         # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
 
-    # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
+# Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
 def update_from_approved(row):
     try:
         if row['status'] == 'Approved' and row['memberName'] in Approved_Memberships['memberName'].values:
