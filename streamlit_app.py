@@ -155,9 +155,9 @@ try:
     # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
     def update_from_approved(row):
         if row['status'] == 'Approved' and row['memberName'] in Approved_Memberships['memberName'].values:
-            match = Approved_Memberships.loc[
-                (Approved_Memberships['memberName'] == row['memberName']) & 
-                (Approved_Memberships['status'] == row['status'])
+            match = approved_df.loc[
+                (approved_df['memberName'] == row['memberName']) & 
+                (approved_df['status'] == row['status'])
             ]
             if not match.empty:
                 row['autoApproved'] = match['autoApproved'].values[0]
