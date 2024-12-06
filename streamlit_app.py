@@ -243,20 +243,41 @@ def main():
                 file_name=f"UCU_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv"
             )
-            # Get the current date and time in UTC
-            now_utc = datetime.now(pytz.utc)  
-
-            # Convert to Pacific Time
+            # Convert the current timestamp to PST
+            now_utc = datetime.now(pytz.utc)
             now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
-
-            # Upload to Google Drive
-            file_id, file_link = upload_to_drive(temp_file_path, f"UCU_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv", folder_id)
+            formatted_pacific_time = now_pacific.strftime('%Y%m%d_%H%M%S')
+            
+            # Option to download the result as CSV
+            st.header("Download Processed Data")
+            st.download_button(
+                label="Download CSV",
+                data=open(temp_file_path, 'rb').read(),
+                file_name=f"UCU_{formatted_pacific_time}.csv",
+                mime="text/csv"
+            )
+            
+            # Upload to Google Drive with PST timestamp
+            st.header("Upload to Google Drive")
+            
+            # File with a timestamp in PST
+            file_id, file_link = upload_to_drive(
+                temp_file_path, 
+                f"UCU_{formatted_pacific_time}.csv", 
+                folder_id
+            )
             if file_id:
-                st.write(f"File uploaded to Google Drive: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
-            # Save another copy with a fixed name
-            file_id_2, file_link_2 = upload_to_drive(temp_file_path, "UCU_Dashboard_linked.csv", folder_id)
+                st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
+            
+            # File with a fixed name
+            file_id_2, file_link_2 = upload_to_drive(
+                temp_file_path, 
+                "UCU_Dashboard_linked.csv", 
+                folder_id
+            )
             if file_id_2:
                 st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
+           
 
 if __name__ == "__main__":
     main()
