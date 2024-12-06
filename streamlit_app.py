@@ -153,20 +153,24 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
 
 # Update columns ('autoApproved', 'funded', 'bankingAccessed', 'directDepositAttempted') for matching records
+# Function to update columns based on approved data
 def update_from_approved(row):
     try:
         if row['status'] == 'Approved' and row['memberName'] in Approved_Memberships['memberName'].values:
-            match = approved_df.loc[(approved_df['memberName'] == row['memberName']) & (approved_df['status'] == row['status'])]
+            match = approved_df.loc[
+                (approved_df['memberName'] == row['memberName']) & (approved_df['status'] == row['status'])
+            ]
             if not match.empty:
                 row['autoApproved'] = match['autoApproved'].values[0]
                 row['funded'] = match['funded'].values[0] if 'funded' in match.columns else None
                 row['bankingAccessed'] = match['bankingAccessed'].values[0] if 'bankingAccessed' in match.columns else None
                 row['directDepositAttempted'] = match['directDepositAttempted'].values[0] if 'directDepositAttempted' in match.columns else None
-        return row 
+        return row
     except Exception as e:
         st.error(f"An error occurred while processing the row: {e}")
         return row  # Return the row even if there's an error
 
+# Rest of your code for processing
 combined_data = combined_data.apply(update_from_approved, axis=1)
 
 # Drop duplicates based on key columns
@@ -176,9 +180,9 @@ cleaned_data = combined_data.drop_duplicates(
 
 # Add creation of the 'School Affiliation' column
 cleaned_data['Affiliation'] = cleaned_data['What is your affiliation?'].fillna('') + ' ' + \
-                                     cleaned_data['What organization are you affiliated with?'].fillna('') + ' ' + \
-                                     cleaned_data['What university do you attend?'].fillna('') + ' ' + \
-                                     cleaned_data['Who is your employer?'].fillna('')
+                               cleaned_data['What organization are you affiliated with?'].fillna('') + ' ' + \
+                               cleaned_data['What university do you attend?'].fillna('') + ' ' + \
+                               cleaned_data['Who is your employer?'].fillna('')
 
 # Remove extra spaces and trim the new 'School Affiliation' column
 cleaned_data['Affiliation'] = cleaned_data['Affiliation'].str.strip()
