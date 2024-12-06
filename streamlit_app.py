@@ -44,7 +44,23 @@ def upload_to_drive(uploaded_file_path, file_name, folder_id):
         print(f"Error: {e}")
         return None, None
 
-
+def read_file(uploaded_file, file_label):
+    try:
+        if uploaded_file.name.endswith(".csv"):
+            return pd.read_csv(uploaded_file)
+        elif uploaded_file.name.endswith(".xlsx"):
+            # Try reading with openpyxl engine
+            excel_data = pd.ExcelFile(uploaded_file, engine='openpyxl')
+            if len(excel_data.sheet_names) == 0:
+                raise ValueError(f"No worksheets found in the file '{file_label}'.")
+            # Read the first sheet by index (index 0)
+            return excel_data.parse(0)  # 0 refers to the first sheet
+        else:
+            raise ValueError(f"Unsupported file type for '{file_label}'. Please upload a CSV or Excel file.")
+    except Exception as e:
+        st.error(f"Error reading the file '{file_label}': {str(e)}")
+        return None
+        
 # Function to process uploaded files
 def process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file):
     # Load the uploaded files into DataFrames
