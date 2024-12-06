@@ -156,14 +156,9 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
     # Function to update columns based on approved data
     def update_from_approved(row):
         if row['status'] == 'Approved' and row['memberName'] in approved_df['memberName'].values:
-            match = approved_df.loc[
-                (approved_df['memberName'] == row['memberName']) & (approved_df['status'] == row['status'])
-            ]
+            match = approved_df.loc[approved_df['memberName'] == row['memberName']]
             if not match.empty:
-                row['autoApproved'] = match['autoApproved'].values[0]
-                row['funded'] = match['funded'].values[0] if 'funded' in match.columns else None
-                row['bankingAccessed'] = match['bankingAccessed'].values[0] if 'bankingAccessed' in match.columns else None
-                row['directDepositAttempted'] = match['directDepositAttempted'].values[0] if 'directDepositAttempted' in match.columns else None
+                row.update(match.iloc[0])
         return row
 
 
