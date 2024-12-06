@@ -234,14 +234,6 @@ def main():
             result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
             st.success("Data cleaned successfully!")
             st.write(result_df)
-
-            # Option to download the result as CSV
-            st.header("Download Processed Data")
-            st.download_button(
-                label="Download CSV",
-                data=open(temp_file_path, 'rb').read(),
-                file_name=f"UCU_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                mime="text/csv"
             )
             # Convert the current timestamp to PST
             now_utc = datetime.now(pytz.utc)
