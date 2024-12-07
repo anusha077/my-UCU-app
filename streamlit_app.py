@@ -235,6 +235,7 @@ def main():
         if st.button("Clean Data"):
             result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
             st.success("Data cleaned successfully!")
+            st.write("Cleaned Dataset")
             st.write(result_df)
 
              # Outreach Name Count Summary
