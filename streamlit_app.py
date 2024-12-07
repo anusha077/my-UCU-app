@@ -318,7 +318,27 @@ def count_outreach_by_month(result_df):
 
     # Use Streamlit to display the plot
     st.pyplot(fig)
-    
+
+def generate_date_range_report(result_df):
+    """
+    Generates a report showing the date range of the data in the 'outreach_date' column,
+    ignoring null values.
+    """
+    # Ensure the 'outreach_date' column is in datetime format
+    result_df['outreach_Date'] = pd.to_datetime(result_df['outreach_Date'], errors='coerce')
+
+    # Drop null values in the 'outreach_date' column
+    non_null_dates = result_df['outreach_Date'].dropna()
+
+    # Calculate the minimum and maximum dates
+    if non_null_dates.empty:
+        st.write("No valid dates found in the 'outreach_Date' column.")
+    else:
+        start_date = non_null_dates.min()
+        end_date = non_null_dates.max()
+        st.write(f"The data covers the period from **{start_date.date()}** to **{end_date.date()}**.")
+
+
 # Streamlit app UI
 def main():
     st.title("File Upload and Processing")
@@ -337,8 +357,9 @@ def main():
             st.write(result_df)
 
             st.header("Basic Analysis of the Data Uploaded")
+            generate_date_range_report(result_df)
              # Outreach Name Count Summary
-            st.header("Outreach Name Count Summary")
+            st.header("Outreach Signup and Application Submissions Summary")
             
             total_outreach_count = result_df['outreach_Name'].notna().sum()
             st.write(f"Total Outreach Signups: {total_outreach_count}")
@@ -348,25 +369,23 @@ def main():
             only_twice = (outreach_name_counts == 2).sum()
             more_than_twice = (outreach_name_counts > 2).sum()
 
-            st.write(f"Number of names found only once: {only_once}")
-            st.write(f"Number of names found only twice: {only_twice}")
-            st.write(f"Number of names found more than twice: {more_than_twice}")
+            st.write(f"Count of customer outreached once: {only_once}")
+            st.write(f"Count of customer outreached twice: {only_twice}")
+            st.write(f"Count of customer outreached more than twice: {more_than_twice}")
 
             filled_applications_count = result_df['submitted_status'].notna().sum()
             st.write(f"Total Filled Applications: {filled_applications_count}")
 
-            
             # Growth Officer Report
-            st.header("Growth Officer Report")
+            st.header("Growth Officer's Report")
             growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
-            st.write("Number of names assigned to each Growth Officer:")
-            st.dataframe(growth_officer_counts.rename("Assigned Names Count").reset_index())
+            st.write("Number of outreaches assigned to each Growth Officer:")
+            st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
 
             # Growth Officer by Event Report
-            st.header("Growth Officer by Event Report")
             growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
-            st.write("Number of distinct Growth Officers assigned to each Event:")
-            st.dataframe(growth_officer_by_event.rename("Distinct Growth Officers Count").reset_index())
+            st.write("Growth Officers assigned to each Event:")
+            st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
 
             # Calculate the total unique events conducted by each Growth Officer
             growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
@@ -375,7 +394,7 @@ def main():
             growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
 
             # Display the results
-            st.write("Total Unique Events Conducted by Each Growth Officer")
+            st.write("Total Events Conducted by Each Growth Officer")
             st.write(growth_officer_total_events)
 
             # Step 4: Plot Growth Officer Assignments for Each Event
