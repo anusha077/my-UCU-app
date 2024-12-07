@@ -225,8 +225,8 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
 
 def plot_growth_officer_assignments(result_df):
     """
-    Generates bar plots for the number of outreach accounts per event for each Growth Officer.
-    Adds unique colors for bars, removes x-axis tick labels, and places the legend outside the plot.
+    Generates proportional bar plots for outreach accounts per event by Growth Officer.
+    Handles legends dynamically for large lists and adjusts subplot sizes.
     """
     import matplotlib.pyplot as plt
     import seaborn as sns
@@ -239,10 +239,11 @@ def plot_growth_officer_assignments(result_df):
     growth_officers = grouped_data['outreach_Growth Officer'].unique()
     num_officers = len(growth_officers)
 
-    # Create a subplot for each Growth Officer
-    fig, axes = plt.subplots(num_officers, 1, figsize=(12, 5 * num_officers), sharex=True)
+    # Dynamically set figure size based on the number of Growth Officers
+    fig_height = 5 * num_officers  # Increase height per officer
+    fig, axes = plt.subplots(num_officers, 1, figsize=(15, fig_height), sharex=True)
 
-    # Ensure axes is always a list, even if there's only one plot
+    # Ensure axes is a list
     if num_officers == 1:
         axes = [axes]
 
@@ -250,7 +251,7 @@ def plot_growth_officer_assignments(result_df):
     for ax, officer in zip(axes, growth_officers):
         # Filter data for the current Growth Officer
         officer_data = grouped_data[grouped_data['outreach_Growth Officer'] == officer]
-        
+
         # Assign unique colors
         unique_colors = sns.color_palette("husl", officer_data.shape[0])
 
@@ -262,23 +263,32 @@ def plot_growth_officer_assignments(result_df):
             ax=ax,
             palette=unique_colors
         )
-        
+
         # Add labels and title
         ax.set_title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=14)
         ax.set_xlabel("")
         ax.set_ylabel("Unique Outreach Accounts", fontsize=12)
-        ax.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)  # Remove x-axis labels
+        ax.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 
         # Create handles for the legend
         handles = [plt.Line2D([0], [0], color=color, lw=4) for color in unique_colors]
         legend_labels = officer_data['Event Name'].tolist()
 
         # Add legend outside the plot
-        ax.legend(handles, legend_labels, loc='upper center', bbox_to_anchor=(0.5, -0.15), fontsize=10, title="Event Names", ncol=4)
+        ax.legend(
+            handles,
+            legend_labels,
+            loc='upper center',
+            bbox_to_anchor=(0.5, -0.15),
+            fontsize=10,
+            title="Event Names",
+            ncol=4
+        )
 
-    # Adjust layout for better spacing
-    plt.tight_layout(rect=[0, 0.1, 1, 1])  # Leave space for the legend
+    # Adjust layout to ensure proper spacing
+    plt.tight_layout(rect=[0, 0.05, 1, 1])  # Leave space for the legend
     st.pyplot(fig)
+
     
 # Streamlit app UI
 def main():
