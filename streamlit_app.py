@@ -336,7 +336,6 @@ def main():
             st.write("Cleaned Dataset")
             st.write(result_df)
 
-            st.write("______________________________________________________________________________________________________________")
             st.header("Basic Analysis of the Data Uploaded")
              # Outreach Name Count Summary
             st.header("Outreach Name Count Summary")
@@ -362,17 +361,17 @@ def main():
             st.dataframe(growth_officer_by_event.rename("Distinct Growth Officers Count").reset_index())
 
             outreach_name_report = result_df['outreach_Name'].value_counts()
-            print("Report of Total outreaches:")
+            st.write("Report of Total outreaches:")
             print(outreach_name_report)
 
             # Step 3: Count Growth Officers per Event
             growth_officer_event_counts = result_df.groupby(['outreach_event_name', 'outreach_Growth Officer'])['outreach_Name'].nunique().reset_index()
-            print("\nGrowth Officer Assignments per Event:")
+            st.write("\nGrowth Officer Assignments per Event:")
             print(growth_officer_event_counts)
 
             
             growth_officer_Total_event_counts = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
-            print("\nTotal Events of each Growth Officer")
+            st.write("\nTotal Events of each Growth Officer")
             print(growth_officer_Total_event_counts)
 
 
@@ -383,7 +382,7 @@ def main():
             st.header("Plot of outreaches per month") 
             count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
-            print("\nReport generation completed.")
+            st.write("\nReport generation completed.")
 
             # Convert the current timestamp to PST
             now_utc = datetime.now(pytz.utc)
