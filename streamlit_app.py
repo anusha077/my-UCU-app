@@ -261,8 +261,7 @@ def plot_growth_officer_assignments(result_df):
 
     # Adjust layout for better spacing
     plt.tight_layout()
-    plt.show()
-    
+    st.pyplot(fig)     
 
 # Streamlit app UI
 def main():
