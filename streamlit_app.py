@@ -336,6 +336,8 @@ def main():
             st.write("Cleaned Dataset")
             st.write(result_df)
 
+            st.write("______________________________________________________________________________________________________________")
+            st.header("Basic Analysis of the Data Uploaded")
              # Outreach Name Count Summary
             st.header("Outreach Name Count Summary")
             outreach_name_counts = result_df['outreach_Name'].value_counts()
