@@ -218,49 +218,49 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         temp_csv_path = temp_csv.name
 
     return final_df_cleaned, temp_csv_path
-    def plot_growth_officer_assignments(result_df):
-        """
-        Generates bar plots for the number of outreach accounts per event for each Growth Officer.
-        """
-        import matplotlib.pyplot as plt
-        import seaborn as sns
+def plot_growth_officer_assignments(result_df):
+    """
+    Generates bar plots for the number of outreach accounts per event for each Growth Officer.
+    """
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-        # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
-        grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
+    # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
+    grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
 
-        # Get unique Growth Officers
-        growth_officers = grouped_data['outreach_Growth Officer'].unique()
-        num_officers = len(growth_officers)
+    # Get unique Growth Officers
+    growth_officers = grouped_data['outreach_Growth Officer'].unique()
+    num_officers = len(growth_officers)
 
-        # Create a subplot for each Growth Officer
-        fig, axes = plt.subplots(num_officers, 1, figsize=(12, 5 * num_officers), sharex=True)
+    # Create a subplot for each Growth Officer
+    fig, axes = plt.subplots(num_officers, 1, figsize=(12, 5 * num_officers), sharex=True)
 
-        # Ensure axes is always a list, even if there's only one plot
-        if num_officers == 1:
-            axes = [axes]
+    # Ensure axes is always a list, even if there's only one plot
+    if num_officers == 1:
+        axes = [axes]
 
-        # Iterate through each Growth Officer and plot the data
-        for ax, officer in zip(axes, growth_officers):
-            # Filter data for the current Growth Officer
-            officer_data = grouped_data[grouped_data['outreach_Growth Officer'] == officer]
+    # Iterate through each Growth Officer and plot the data
+    for ax, officer in zip(axes, growth_officers):
+        # Filter data for the current Growth Officer
+        officer_data = grouped_data[grouped_data['outreach_Growth Officer'] == officer]
         
-            # Create a bar plot for the current Growth Officer
-            sns.barplot(
-                data=officer_data,
-                x="outreach_event_name",
-                y="outreach_Name",
-                ax=ax,
-                palette="viridis"
-            )
+        # Create a bar plot for the current Growth Officer
+        sns.barplot(
+            data=officer_data,
+            x="outreach_event_name",
+            y="outreach_Name",
+            ax=ax,
+            palette="viridis"
+        )
         
-            ax.set_title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=14)
-            ax.set_xlabel("Event Name", fontsize=12)
-            ax.set_ylabel("Outreach Accounts", fontsize=12)
-            ax.tick_params(axis='x', rotation=45)
+        ax.set_title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=14)
+        ax.set_xlabel("Event Name", fontsize=12)
+        ax.set_ylabel("Outreach Accounts", fontsize=12)
+        ax.tick_params(axis='x', rotation=45)
 
-        # Adjust layout for better spacing
-        plt.tight_layout()
-        plt.show()
+    # Adjust layout for better spacing
+    plt.tight_layout()
+    plt.show()
     
 
 # Streamlit app UI
