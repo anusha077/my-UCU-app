@@ -336,7 +336,7 @@ def generate_date_range_report(result_df):
     else:
         start_date = non_null_dates.min()
         end_date = non_null_dates.max()
-        st.write(f"The data covers the period from **{start_date.date()}** to **{end_date.date()}**.")
+        st.header(f"The data covers the period from **{start_date.date()}** to **{end_date.date()}**.")
 
 
 # Streamlit app UI
@@ -356,8 +356,9 @@ def main():
             st.write("Cleaned Dataset")
             st.write(result_df)
 
-            st.header("Basic Analysis of the Data Uploaded")
             generate_date_range_report(result_df)
+            st.header("Basic Analysis of the Data Uploaded")
+            
              # Outreach Name Count Summary
             st.header("Outreach Signup and Application Submissions Summary")
             
