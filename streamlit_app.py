@@ -9,6 +9,8 @@ import os
 import tempfile
 import json
 import pytz
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Define the scope
 SCOPE = ['https://www.googleapis.com/auth/drive']
@@ -222,8 +224,7 @@ def plot_growth_officer_assignments(result_df):
     """
     Generates bar plots for the number of outreach accounts per event for each Growth Officer.
     """
-    import matplotlib.pyplot as plt
-    import seaborn as sns
+
 
     # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
     grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
