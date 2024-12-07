@@ -367,9 +367,13 @@ def main():
             print(growth_officer_event_counts)
 
             
-            growth_officer_Total_event_counts = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
-            st.write("\nTotal Events of each Growth Officer")
-            print(growth_officer_Total_event_counts)
+            # Calculate the total unique events conducted by each Growth Officer
+            growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
+            # Rename columns for clarity
+            growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+            # Display the results
+            st.write("Total Unique Events Conducted by Each Growth Officer")
+            st.write(growth_officer_total_events)
 
 
             # Step 4: Plot Growth Officer Assignments for Each Event
