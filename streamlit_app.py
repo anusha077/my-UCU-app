@@ -291,7 +291,7 @@ def plot_growth_officer_assignments(result_df):
 
 def count_outreach_by_month(result_df):
     """
-    Counts the number of outreaches by month and plots the results.
+    Counts the number of outreaches by month and displays the plot in Streamlit.
     """
     # Ensure the date column is in datetime format
     result_df['outreach_Date'] = pd.to_datetime(result_df['outreach_Date'])
@@ -305,20 +305,20 @@ def count_outreach_by_month(result_df):
     # Sort by month
     outreach_counts = outreach_counts.sort_values('Year-Month')
 
-    # Plotting
-    plt.figure(figsize=(12, 6))
-    plt.plot(outreach_counts['Year-Month'].astype(str), outreach_counts['Outreach Count'], marker='o', linestyle='-', color='b')
+    # Create the figure and axis
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(outreach_counts['Year-Month'].astype(str), outreach_counts['Outreach Count'], marker='o', linestyle='-', color='b')
 
     # Add labels and title
-    plt.xlabel("Month", fontsize=12)
-    plt.ylabel("Number of Outreaches", fontsize=12)
-    plt.title("Outreach Counts by Month", fontsize=14)
-    plt.xticks(rotation=45)
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    ax.set_xlabel("Month", fontsize=12)
+    ax.set_ylabel("Number of Outreaches", fontsize=12)
+    ax.set_title("Outreach Counts by Month", fontsize=14)
+    ax.tick_params(axis='x', rotation=45)
+    ax.grid(axis='y', linestyle='--', alpha=0.7)
 
-    # Show the plot
-    plt.tight_layout()
-    st.pyplot(fig)   
+    # Use Streamlit to display the plot
+    st.pyplot(fig)
+    
 # Streamlit app UI
 def main():
     st.title("File Upload and Processing")
