@@ -360,11 +360,15 @@ def main():
             st.write("Number of distinct Growth Officers assigned to each Event:")
             st.dataframe(growth_officer_by_event.rename("Distinct Growth Officers Count").reset_index())
 
+            # Calculate the total unique events conducted by each Growth Officer
+            growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
 
-            # Step 3: Count Growth Officers per Event
-            growth_officer_event_counts = result_df.groupby(['outreach_event_name', 'outreach_Growth Officer'])['outreach_Name'].nunique().reset_index()
-            st.write("\nGrowth Officer Assignments per Event:")
-            print(growth_officer_event_counts)
+            # Rename columns for clarity
+            growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+
+            # Display the results
+            st.write("Total Unique Events Conducted by Each Growth Officer")
+            st.write(growth_officer_total_events)
 
 
 
