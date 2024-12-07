@@ -220,53 +220,64 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         temp_csv_path = temp_csv.name
 
     return final_df_cleaned, temp_csv_path
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import textwrap
+
 def plot_growth_officer_assignments_v2(result_df):
-    """
-    Generates improved bar plots for the number of outreach accounts per event for each Growth Officer.
-    """
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import textwrap
-
-    # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
-    grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
-    grouped_data.rename(columns={"outreach_event_name": "Event Name", "outreach_Name": "Unique Outreach Accounts"}, inplace=True)
-
-    # Get unique Growth Officers
-    growth_officers = grouped_data['outreach_Growth Officer'].unique()
-
-    # Iterate through each Growth Officer to generate individual plots
-    for officer in growth_officers:
-        # Filter data for the current Growth Officer
-        officer_data = grouped_data[grouped_data['outreach_Growth Officer'] == officer]
+    try:
+        # Check if the DataFrame has the necessary columns
+        required_columns = ['outreach_Growth Officer', 'outreach_event_name', 'outreach_Name']
+        if not all(col in result_df.columns for col in required_columns):
+            raise ValueError("DataFrame is missing required columns")
         
-        # Sort events by the number of unique outreach accounts
-        officer_data = officer_data.sort_values(by="Unique Outreach Accounts", ascending=False)
+        # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
+        grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
+        grouped_data.rename(columns={"outreach_event_name": "Event Name", "outreach_Name": "Unique Outreach Accounts"}, inplace=True)
 
-        # Wrap long event names for better readability
-        officer_data['Event Name'] = officer_data['Event Name'].apply(lambda x: "\n".join(textwrap.wrap(x, width=25)))
+        # Get unique Growth Officers
+        growth_officers = grouped_data['outreach_Growth Officer'].unique()
 
-        # Create the bar plot
-        plt.figure(figsize=(10, 6))
-        sns.barplot(
-            data=officer_data,
-            x="Unique Outreach Accounts",
-            y="Event Name",
-            palette="muted"
-        )
+        # Iterate through each Growth Officer to generate individual plots
+        for officer in growth_officers:
+            # Filter data for the current Growth Officer
+            officer_data = grouped_data[grouped_data['outreach_Growth Officer'] == officer]
+            
+            # Sort events by the number of unique outreach accounts
+            officer_data = officer_data.sort_values(by="Unique Outreach Accounts", ascending=False)
 
-        # Add annotations for each bar
-        for index, value in enumerate(officer_data["Unique Outreach Accounts"]):
-            plt.text(value + 0.5, index, str(value), color="black", va="center")
+            # Wrap long event names for better readability
+            officer_data['Event Name'] = officer_data['Event Name'].apply(lambda x: "\n".join(textwrap.wrap(x, width=25)))
 
-        # Set plot titles and labels
-        plt.title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=16)
-        plt.xlabel("Unique Outreach Accounts", fontsize=12)
-        plt.ylabel("Event Name", fontsize=12)
+            # Create the bar plot
+            plt.figure(figsize=(10, 6))
+            sns.barplot(
+                data=officer_data,
+                x="Unique Outreach Accounts",
+                y="Event Name",
+                palette="muted"
+            )
 
-        # Optimize layout
-        plt.tight_layout()
-        st.pyplot(plt)
+            # Add annotations for each bar
+            for index, value in enumerate(officer_data["Unique Outreach Accounts"]):
+                plt.text(value + 0.5, index, str(value), color="black", va="center")
+
+            # Set plot titles and labels
+            plt.title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=16)
+            plt.xlabel("Unique Outreach Accounts", fontsize=12)
+            plt.ylabel("Event Name", fontsize=12)
+
+            # Optimize layout
+            plt.tight_layout()
+            st.pyplot(plt)
+    
+    except ValueError as ve:
+        print(f"ValueError: {ve}")
+        st.error(f"Error: {ve}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        st.error(f"Unexpected error: {e}")
 
     
 # Streamlit app UI
