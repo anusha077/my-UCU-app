@@ -223,10 +223,14 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
 def plot_growth_officer_assignments(result_df):
     """
     Generates bar plots for the number of outreach accounts per event for each Growth Officer.
+    Adds labels, axes titles, legends, and improved visual clarity.
     """
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
     # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
     grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
+    grouped_data.rename(columns={"outreach_event_name": "Event Name", "outreach_Name": "Unique Outreach Accounts"}, inplace=True)
 
     # Get unique Growth Officers
     growth_officers = grouped_data['outreach_Growth Officer'].unique()
@@ -253,20 +257,21 @@ def plot_growth_officer_assignments(result_df):
             palette="viridis"
         )
         
+        # Add labels and title
         ax.set_title(f"Outreach Accounts for Growth Officer: {officer}", fontsize=14)
         ax.set_xlabel("Event Name", fontsize=12)
-        ax.set_ylabel("Outreach Accounts", fontsize=12)
+        ax.set_ylabel("Unique Outreach Accounts", fontsize=12)
         ax.tick_params(axis='x', rotation=45)
 
-    # Add a legend for the color palette
+        # Add a legend for the color palette
         for patch, event_name in zip(ax.patches, officer_data['Event Name']):
             patch.set_label(event_name)
         ax.legend(loc='upper right', title="Event Names")
 
     # Adjust layout for better spacing
     plt.tight_layout()
-    st.pyplot(fig)     
-
+    st.pyplot(fig)
+    
 # Streamlit app UI
 def main():
     st.title("File Upload and Processing")
