@@ -357,10 +357,11 @@ def main():
             st.write(result_df)
 
             generate_date_range_report(result_df)
+            
             st.header("Basic Analysis of the Data Uploaded")
             
              # Outreach Name Count Summary
-            st.header("Outreach Signup and Application Submissions Summary")
+            st.subheader("Outreach Signup and Application Submissions Summary")
             
             total_outreach_count = result_df['outreach_Name'].notna().sum()
             st.write(f"Total Outreach Signups: {total_outreach_count}")
@@ -378,7 +379,7 @@ def main():
             st.write(f"Total Filled Applications: {filled_applications_count}")
 
             # Growth Officer Report
-            st.header("Growth Officer's Report")
+            st.subheader("Growth Officer's Report")
             growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
             st.write("Number of outreaches assigned to each Growth Officer:")
             st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
@@ -399,10 +400,10 @@ def main():
             st.write(growth_officer_total_events)
 
             # Step 4: Plot Growth Officer Assignments for Each Event
-            st.header("Plot Growth Officer Assignments for Each Event") 
+            st.subheader("Plot Growth Officer Assignments for Each Event") 
             plot_growth_officer_assignments(result_df)
 
-            st.header("Plot of outreaches per month") 
+            st.subheader("Plot of outreaches per month") 
             count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
             st.write("\nReport generation completed.")
