@@ -226,11 +226,10 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
 def plot_growth_officer_assignments(result_df):
     """
     Generates bar plots for the number of outreach accounts per event for each Growth Officer.
-    Adds unique colors for bars, removes x-axis tick labels, and keeps the legend.
+    Adds unique colors for bars, removes x-axis tick labels, and places the legend outside the plot.
     """
     import matplotlib.pyplot as plt
     import seaborn as sns
-    import numpy as np
 
     # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
     grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
@@ -270,15 +269,16 @@ def plot_growth_officer_assignments(result_df):
         ax.set_ylabel("Unique Outreach Accounts", fontsize=12)
         ax.tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)  # Remove x-axis labels
 
-        # Add legend for colors
+        # Create handles for the legend
         handles = [plt.Line2D([0], [0], color=color, lw=4) for color in unique_colors]
-        ax.legend(handles, officer_data['Event Name'], loc='upper right', title="Event Names", fontsize=10)
+        legend_labels = officer_data['Event Name'].tolist()
+
+        # Add legend outside the plot
+        ax.legend(handles, legend_labels, loc='upper center', bbox_to_anchor=(0.5, -0.15), fontsize=10, title="Event Names", ncol=4)
 
     # Adjust layout for better spacing
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0.1, 1, 1])  # Leave space for the legend
     st.pyplot(fig)
-
-
     
 # Streamlit app UI
 def main():
@@ -330,6 +330,7 @@ def main():
             print(growth_officer_event_counts)
 
             # Step 4: Plot Growth Officer Assignments for Each Event
+            st.write("Plot Growth Officer Assignments for Each Event") 
             plot_growth_officer_assignments(result_df)
 
             # Step 5: Any additional steps or final output
