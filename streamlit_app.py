@@ -347,6 +347,13 @@ def main():
             st.write(f"Number of names found only once: {only_once}")
             st.write(f"Number of names found only twice: {only_twice}")
             st.write(f"Number of names found more than twice: {more_than_twice}")
+
+            filled_applications_count = result_df['submitted_status'].notna().sum()
+            st.write(f"Number of names found only once: {only_once}")
+
+            filled_applications_count = result_df['submitted_status'].notna().sum()
+            st.write(f"Total Filled Applications: {filled_applications_count}")
+
             
             # Growth Officer Report
             st.header("Growth Officer Report")
@@ -369,8 +376,6 @@ def main():
             # Display the results
             st.write("Total Unique Events Conducted by Each Growth Officer")
             st.write(growth_officer_total_events)
-
-
 
             # Step 4: Plot Growth Officer Assignments for Each Event
             st.header("Plot Growth Officer Assignments for Each Event") 
