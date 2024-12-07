@@ -15,4 +15,3 @@ pytz
 openpyxl
 matplotlib
 seaborn
-textwrap
