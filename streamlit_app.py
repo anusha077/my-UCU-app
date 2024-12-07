@@ -341,7 +341,7 @@ def main():
             st.header("Outreach Name Count Summary")
             
             total_outreach_count = result_df['outreach_Name'].notna().sum()
-            st.write(f"Total Outreach Signups: {filled_applications_count}")
+            st.write(f"Total Outreach Signups: {total_outreach_count}")
             
             outreach_name_counts = result_df['outreach_Name'].value_counts()
             only_once = (outreach_name_counts == 1).sum()
