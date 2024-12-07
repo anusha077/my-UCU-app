@@ -235,6 +235,12 @@ def main():
             st.success("Data cleaned successfully!")
             st.write(result_df)
 
+             # Display the count of outreach_Name occurrences
+            st.header("Outreach Name Count Report")
+            outreach_name_counts = result_df['outreach_Name'].value_counts().reset_index()
+            outreach_name_counts.columns = ['outreach_Name', 'Count']
+            st.table(outreach_name_counts)
+            
             # Convert the current timestamp to PST
             now_utc = datetime.now(pytz.utc)
             now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
