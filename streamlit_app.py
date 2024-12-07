@@ -339,6 +339,10 @@ def main():
             st.header("Basic Analysis of the Data Uploaded")
              # Outreach Name Count Summary
             st.header("Outreach Name Count Summary")
+            
+            total_outreach_count = result_df['outreach_Name'].notna().sum()
+            st.write(f"Total Outreach Signups: {filled_applications_count}")
+            
             outreach_name_counts = result_df['outreach_Name'].value_counts()
             only_once = (outreach_name_counts == 1).sum()
             only_twice = (outreach_name_counts == 2).sum()
@@ -348,7 +352,6 @@ def main():
             st.write(f"Number of names found only twice: {only_twice}")
             st.write(f"Number of names found more than twice: {more_than_twice}")
 
-            
             filled_applications_count = result_df['submitted_status'].notna().sum()
             st.write(f"Total Filled Applications: {filled_applications_count}")
 
