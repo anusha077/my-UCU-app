@@ -225,7 +225,6 @@ def plot_growth_officer_assignments(result_df):
     Generates bar plots for the number of outreach accounts per event for each Growth Officer.
     """
 
-
     # Group data by Growth Officer and Event Name, and count unique Outreach Accounts
     grouped_data = result_df.groupby(['outreach_Growth Officer', 'outreach_event_name'])['outreach_Name'].nunique().reset_index()
 
@@ -248,8 +247,8 @@ def plot_growth_officer_assignments(result_df):
         # Create a bar plot for the current Growth Officer
         sns.barplot(
             data=officer_data,
-            x="outreach_event_name",
-            y="outreach_Name",
+            x="Event Name",
+            y="Unique Outreach Accounts",
             ax=ax,
             palette="viridis"
         )
@@ -258,6 +257,11 @@ def plot_growth_officer_assignments(result_df):
         ax.set_xlabel("Event Name", fontsize=12)
         ax.set_ylabel("Outreach Accounts", fontsize=12)
         ax.tick_params(axis='x', rotation=45)
+
+    # Add a legend for the color palette
+        for patch, event_name in zip(ax.patches, officer_data['Event Name']):
+            patch.set_label(event_name)
+        ax.legend(loc='upper right', title="Event Names")
 
     # Adjust layout for better spacing
     plt.tight_layout()
