@@ -218,6 +218,8 @@ def process_files(member_outreach_file, event_debrief_file, submitted_file, appr
         temp_csv_path = temp_csv.name
 
     return final_df_cleaned, temp_csv_path
+    
+    
 
 # Streamlit app UI
 def main():
@@ -235,11 +237,28 @@ def main():
             st.success("Data cleaned successfully!")
             st.write(result_df)
 
-             # Display the count of outreach_Name occurrences
-            st.header("Outreach Name Count Report")
-            outreach_name_counts = result_df['outreach_Name'].value_counts().reset_index()
-            outreach_name_counts.columns = ['outreach_Name', 'Count']
-            st.table(outreach_name_counts)
+             # Outreach Name Count Summary
+            st.header("Outreach Name Count Summary")
+            outreach_name_counts = result_df['outreach_Name'].value_counts()
+            only_once = (outreach_name_counts == 1).sum()
+            only_twice = (outreach_name_counts == 2).sum()
+            more_than_twice = (outreach_name_counts > 2).sum()
+
+            st.write(f"Number of names found only once: {only_once}")
+            st.write(f"Number of names found only twice: {only_twice}")
+            st.write(f"Number of names found more than twice: {more_than_twice}")
+            
+            # Growth Officer Report
+            st.header("Growth Officer Report")
+            growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
+            st.write("Number of names assigned to each Growth Officer:")
+            st.dataframe(growth_officer_counts.rename("Assigned Names Count").reset_index())
+
+            # Growth Officer by Event Report
+            st.header("Growth Officer by Event Report")
+            growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
+            st.write("Number of distinct Growth Officers assigned to each Event:")
+            st.dataframe(growth_officer_by_event.rename("Distinct Growth Officers Count").reset_index())
             
             # Convert the current timestamp to PST
             now_utc = datetime.now(pytz.utc)
