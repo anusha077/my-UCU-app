@@ -13,5 +13,5 @@ pydeck==0.9.1
 markdown-it-py==3.0.0
 pytz
 openpyxl
-matplotlib==3.8.0
-seaborn==0.12.2
+matplotlib
+seaborn
