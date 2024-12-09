@@ -398,10 +398,6 @@ def main():
             st.write("Total Events Conducted by Each Growth Officer")
             st.write(growth_officer_total_events)
 
-            # Step 4: Plot Growth Officer Assignments for Each Event
-            st.subheader("Plot Growth Officer Assignments for Each Event") 
-            plot_growth_officer_assignments(result_df)
-
             st.subheader("Plot of outreaches per month") 
             count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
