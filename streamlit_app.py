@@ -385,7 +385,7 @@ def main():
         if st.button("Hit to Clean Data"):
             result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
             st.success("Hurray! Data cleaned successfully!")
-            st.write("Cleaned Dataset")
+            #st.write("Cleaned Dataset")
             #st.write(result_df)
             
             st.header("Basic Analysis of the Data Uploaded")
@@ -393,21 +393,44 @@ def main():
             
              # Outreach Name Count Summary
             st.subheader("Outreach Signup and Application Submissions Summary")
-            
+
             total_outreach_count = result_df['outreach_Name'].notna().sum()
-            st.write(f"Total Outreach Signups: {total_outreach_count}")
+            #st.write(f"Total Outreach Signups: {total_outreach_count}")
             
             outreach_name_counts = result_df['outreach_Name'].value_counts()
             only_once = (outreach_name_counts == 1).sum()
             only_twice = (outreach_name_counts == 2).sum()
             more_than_twice = (outreach_name_counts > 2).sum()
 
-            st.write(f"Count of customer outreached once: {only_once}")
-            st.write(f"Count of customer outreached twice: {only_twice}")
-            st.write(f"Count of customer outreached more than twice: {more_than_twice}")
+            #st.write(f"Count of customer outreached once: {only_once}")
+            #st.write(f"Count of customer outreached twice: {only_twice}")
+            #st.write(f"Count of customer outreached more than twice: {more_than_twice}")
 
             filled_applications_count = result_df['submitted_status'].notna().sum()
-            st.write(f"Total Filled Applications: {filled_applications_count}")
+            #st.write(f"Total Filled Applications: {filled_applications_count}")
+
+            outreach_summary_data = {
+                "Metric": [
+                "Total Outreach Signups", 
+                "Count of customers outreached once", 
+                "Count of customers outreached twice", 
+                "Count of customers outreached more than twice", 
+                "Total Filled Applications"
+                ],
+                "Count": [
+                    total_outreach_count, 
+                    only_once, 
+                    only_twice, 
+                    more_than_twice, 
+                    filled_applications_count
+                ]
+            }
+            
+            # Convert the dictionary to a DataFrame for better display
+            outreach_summary_df = pd.DataFrame(outreach_summary_data)
+            
+            # Display the table using st.dataframe()
+            st.dataframe(outreach_summary_df)
 
             # Growth Officer Report
             st.subheader("Growth Officer's Report")
