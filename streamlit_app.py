@@ -342,6 +342,15 @@ def plot_growth_officer_events(result_df):
     ax.tick_params(axis='x', rotation=45)  # Rotate the x-axis labels for better readability
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
+    # Annotate each bar with the number of events
+    for bar in bars:
+        height = bar.get_height()  # Get the height of the bar
+        ax.annotate(f'{height}',  # Annotate with the height value (number of events)
+                    xy=(bar.get_x() + bar.get_width() / 2, height),  # Positioning the annotation
+                    xytext=(0, 3),  # Slightly offset the text vertically
+                    textcoords='offset points',
+                    ha='center', va='bottom', fontsize=10, color='black')
+
     # Use Streamlit to display the plot
     st.pyplot(fig)
     
