@@ -384,7 +384,7 @@ def main():
             unsafe_allow_html=True
         )
 
-        col1, col2, col3 = st.columns([1, 1, 1])  # To ensure centering
+        col1, col2, col3 = st.columns([1, 0, 1])  # To ensure centering
         with col2:
             if st.button("Clean Data", key="clean_data"):
                 result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
