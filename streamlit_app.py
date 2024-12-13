@@ -342,6 +342,12 @@ def generate_date_range_report(result_df):
 # Streamlit app UI
 def main():
     st.title("File Upload and Processing")
+    st.markdown(
+    """
+    <h1 style='text-align: center; font-size: 2.5rem; font-weight: bold;'>File Upload and Processing</h1>
+    """,
+    unsafe_allow_html=True
+    )
     st.write("Please submit the following files and make sure they are in the correct format: CSV and/or XLSX only.")
      # File upload
     member_outreach_file = st.file_uploader("Upload Member Outreach File (CSV/XLSX)", type=["csv", "xlsx"])
