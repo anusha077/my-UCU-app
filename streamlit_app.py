@@ -359,34 +359,33 @@ def main():
     approved_file = st.file_uploader("Upload Approved File (CSV/XLSX)", type=["csv", "xlsx"])
     
     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
-        st.markdown(
-            """
-            <style>
-            .center-button {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-            }
-            .center-button button {
-                font-size: 2.5rem;
-                padding: 25px 40px;
-                background-color: #007BFF;
-                color: white;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-            .center-button button:hover {
-            background-color: #0056b3;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-
         col1, col2, col3 = st.columns([1, 1, 1])  # To ensure centering
         with col2:
+            st.markdown(
+                """
+                <style>
+                .center-button {
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 20px;
+                }
+                .center-button button {
+                    font-size: 2.5rem;
+                    padding: 25px 40px;
+                    background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+                .center-button button:hover {
+                background-color: #0056b3;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True
+            )
             st.markdown('<div class="center-button">', unsafe_allow_html=True)
             if st.button("Clean Data", key="clean_data"):
                 with st.container():
