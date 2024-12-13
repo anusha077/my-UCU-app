@@ -354,7 +354,7 @@ def main():
     
         /* Change the color of the header */
         .header-text {
-            color: #001f3d;  /* Navy Blue color */
+            color: #003366;  /* Navy Blue color */
             font-size: 2.5rem;
             font-weight: bold;
             text-align: center;
