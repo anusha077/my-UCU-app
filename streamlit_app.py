@@ -369,22 +369,23 @@ def main():
                     justify-content: center;
                     margin-top: 20px;
                 }
-                .center-button button {
-                    font-size: 2.5rem;
-                    padding: 25px 40px;
-                    background-color: #007BFF;
-                    color: white;
-                    border: none;
-                    border-radius: 12px;
-                    cursor: pointer;
-                    transition: background-color 0.3s;
+                /* Make sure we target Streamlit's button specifically */
+                .center-button .stButton button {
+                    font-size: 2.5rem !important;  /* Add !important to override default styles */
+                    padding: 25px 40px !important;
+                    background-color: #007BFF !important;
+                    color: white !important;
+                    border: none !important;
+                    border-radius: 12px !important;
+                    cursor: pointer !important;
+                    transition: background-color 0.3s !important;
                 }
-                .center-button button:hover {
-                background-color: #0056b3;
+        
+                .center-button .stButton button:hover {
+                    background-color: #0056b3 !important;
                 }
                 </style>
-                """,
-                unsafe_allow_html=True
+                """, unsafe_allow_html=True
             )
             st.markdown('<div class="center-button">', unsafe_allow_html=True)
             if st.button("Clean Data", key="clean_data"):
