@@ -345,7 +345,7 @@ def main():
     """
     <div style='text-align: center;'>
         <h1 style='font-size: 2.5rem; font-weight: bold;'>Data Processing Platform</h1>
-        <h3 style='font-size: 1.5rem; color: grey; font-style: italic;'>From Raw to Ready</h3>
+        <h4 style='font-size: 1.5rem; color: grey; font-style: italic;'>From Raw to Ready!</h4>
     </div>
     """,
     unsafe_allow_html=True
@@ -392,87 +392,87 @@ def main():
                 st.write("Cleaned Dataset")
                 st.write(result_df)
             
-            st.header("Basic Analysis of the Data Uploaded")
-            generate_date_range_report(result_df)
-            
-             # Outreach Name Count Summary
-            st.subheader("Outreach Signup and Application Submissions Summary")
-            
-            total_outreach_count = result_df['outreach_Name'].notna().sum()
-            st.write(f"Total Outreach Signups: {total_outreach_count}")
-            
-            outreach_name_counts = result_df['outreach_Name'].value_counts()
-            only_once = (outreach_name_counts == 1).sum()
-            only_twice = (outreach_name_counts == 2).sum()
-            more_than_twice = (outreach_name_counts > 2).sum()
-
-            st.write(f"Count of customer outreached once: {only_once}")
-            st.write(f"Count of customer outreached twice: {only_twice}")
-            st.write(f"Count of customer outreached more than twice: {more_than_twice}")
-
-            filled_applications_count = result_df['submitted_status'].notna().sum()
-            st.write(f"Total Filled Applications: {filled_applications_count}")
-
-            # Growth Officer Report
-            st.subheader("Growth Officer's Report")
-            growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
-            st.write("Number of outreaches assigned to each Growth Officer:")
-            st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
-
-            # Growth Officer by Event Report
-            growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
-            st.write("Growth Officers assigned to each Event:")
-            st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
-
-            # Calculate the total unique events conducted by each Growth Officer
-            growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
-
-            # Rename columns for clarity
-            growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
-
-            # Display the results
-            st.write("Total Events Conducted by Each Growth Officer")
-            st.write(growth_officer_total_events)
-
-            st.subheader("Plot of outreaches per month") 
-            count_outreach_by_month(result_df)
-            # Step 5: Any additional steps or final output
-            st.write("\nReport generation completed.")
-
-            # Convert the current timestamp to PST
-            now_utc = datetime.now(pytz.utc)
-            now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
-            formatted_pacific_time = now_pacific.strftime('%Y%m%d_%H%M%S')
-            
-            # Option to download the result as CSV
-            st.header("Download Processed Data")
-            st.download_button(
-                label="Download CSV",
-                data=open(temp_file_path, 'rb').read(),
-                file_name=f"UCU_{formatted_pacific_time}.csv",
-                mime="text/csv"
-            )
-            
-            # Upload to Google Drive with PST timestamp
-            st.header("Upload to Google Drive")
-            
-            # File with a timestamp in PST
-            file_id, file_link = upload_to_drive(
-                temp_file_path, 
-                f"UCU_{formatted_pacific_time}.csv", 
-                folder_id
-            )
-            if file_id:
-                st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
-            
-            # File with a fixed name
-            file_id_2, file_link_2 = upload_to_drive(
-                temp_file_path, 
-                "UCU_Dashboard_linked.csv", 
-                folder_id
-            )
-            if file_id_2:
-                st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
+                st.header("Basic Analysis of the Data Uploaded")
+                generate_date_range_report(result_df)
+                
+                 # Outreach Name Count Summary
+                st.subheader("Outreach Signup and Application Submissions Summary")
+                
+                total_outreach_count = result_df['outreach_Name'].notna().sum()
+                st.write(f"Total Outreach Signups: {total_outreach_count}")
+                
+                outreach_name_counts = result_df['outreach_Name'].value_counts()
+                only_once = (outreach_name_counts == 1).sum()
+                only_twice = (outreach_name_counts == 2).sum()
+                more_than_twice = (outreach_name_counts > 2).sum()
+    
+                st.write(f"Count of customer outreached once: {only_once}")
+                st.write(f"Count of customer outreached twice: {only_twice}")
+                st.write(f"Count of customer outreached more than twice: {more_than_twice}")
+    
+                filled_applications_count = result_df['submitted_status'].notna().sum()
+                st.write(f"Total Filled Applications: {filled_applications_count}")
+    
+                # Growth Officer Report
+                st.subheader("Growth Officer's Report")
+                growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
+                st.write("Number of outreaches assigned to each Growth Officer:")
+                st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
+    
+                # Growth Officer by Event Report
+                growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
+                st.write("Growth Officers assigned to each Event:")
+                st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
+    
+                # Calculate the total unique events conducted by each Growth Officer
+                growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
+    
+                # Rename columns for clarity
+                growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+    
+                # Display the results
+                st.write("Total Events Conducted by Each Growth Officer")
+                st.write(growth_officer_total_events)
+    
+                st.subheader("Plot of outreaches per month") 
+                count_outreach_by_month(result_df)
+                # Step 5: Any additional steps or final output
+                st.write("\nReport generation completed.")
+    
+                # Convert the current timestamp to PST
+                now_utc = datetime.now(pytz.utc)
+                now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
+                formatted_pacific_time = now_pacific.strftime('%Y%m%d_%H%M%S')
+                
+                # Option to download the result as CSV
+                st.header("Download Processed Data")
+                st.download_button(
+                    label="Download CSV",
+                    data=open(temp_file_path, 'rb').read(),
+                    file_name=f"UCU_{formatted_pacific_time}.csv",
+                    mime="text/csv"
+                )
+                
+                # Upload to Google Drive with PST timestamp
+                st.header("Upload to Google Drive")
+                
+                # File with a timestamp in PST
+                file_id, file_link = upload_to_drive(
+                    temp_file_path, 
+                    f"UCU_{formatted_pacific_time}.csv", 
+                    folder_id
+                )
+                if file_id:
+                    st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
+                
+                # File with a fixed name
+                file_id_2, file_link_2 = upload_to_drive(
+                    temp_file_path, 
+                    "UCU_Dashboard_linked.csv", 
+                    folder_id
+                )
+                if file_id_2:
+                    st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
            
 
 if __name__ == "__main__":
