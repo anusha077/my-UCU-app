@@ -489,7 +489,7 @@ def main():
             st.subheader("Plot of outreaches per month") 
             count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
-            st.write("\nReport generation completed.")
+            #st.write("\nReport generation completed.")
 
             # Convert the current timestamp to PST
             now_utc = datetime.now(pytz.utc)
@@ -506,7 +506,7 @@ def main():
             )
             
             # Upload to Google Drive with PST timestamp
-            st.header("Upload to Google Drive")
+            st.header("Upload the Cleaned data file to Google Drive")
             
             # File with a timestamp in PST
             file_id, file_link = upload_to_drive(
@@ -514,10 +514,17 @@ def main():
                 f"UCU_{formatted_pacific_time}.csv", 
                 folder_id
             )
+
+            folder_url = "https://drive.google.com/drive/u/0/folders/1HifJfkEqrqvoRz9uPXkOAiF-Wy9VZUfr"
+            
+            # Display the link to the Google Drive folder
+            st.write(f"Files are uploaded to the Google Drive folder: [Click here to access the folder]({folder_url})")
+            
+            # For uploading files, your existing logic can remain
             if file_id:
                 st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
             
-             # File with a fixed name
+            # If you need to handle the second file upload
             file_id_2, file_link_2 = upload_to_drive(
                 temp_file_path, 
                 "UCU_Dashboard_linked.csv", 
@@ -525,7 +532,6 @@ def main():
             )
             if file_id_2:
                 st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
-
 
 if __name__ == "__main__":
     main()
