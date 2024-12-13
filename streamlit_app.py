@@ -318,7 +318,33 @@ def count_outreach_by_month(result_df):
 
     # Use Streamlit to display the plot
     st.pyplot(fig)
+    
+def plot_growth_officer_events(result_df):
+    """
+    Plots the total unique events conducted by each Growth Officer.
+    """
+    # Calculate the total unique events conducted by each Growth Officer
+    growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
 
+    # Rename columns for clarity
+    growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+
+    # Create the figure and axis
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Plot the bar chart
+    ax.bar(growth_officer_total_events['Growth Officer'], growth_officer_total_events['Total Unique Events'], color='skyblue')
+
+    # Add labels and title
+    ax.set_xlabel("Growth Officer", fontsize=12)
+    ax.set_ylabel("Total Unique Events", fontsize=12)
+    ax.set_title("Total Unique Events Conducted by Each Growth Officer", fontsize=14)
+    ax.tick_params(axis='x', rotation=45)  # Rotate the x-axis labels for better readability
+    ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Use Streamlit to display the plot
+    st.pyplot(fig)
+    
 def generate_date_range_report(result_df):
     """
     Generates a report showing the date range of the data in the 'outreach_date' column,
@@ -444,15 +470,16 @@ def main():
             st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
 
             # Calculate the total unique events conducted by each Growth Officer
-            growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
+            #growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
 
             # Rename columns for clarity
-            growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+            #growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
 
             # Display the results
-            st.write("Total Events Conducted by Each Growth Officer")
-            st.write(growth_officer_total_events)
-
+            st.subheader("Total Events Conducted by Each Growth Officer")
+            #st.write(growth_officer_total_events)
+            plot_growth_officer_events(result_df)
+            
             st.subheader("Plot of outreaches per month") 
             count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
