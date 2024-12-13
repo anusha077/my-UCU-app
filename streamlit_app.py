@@ -321,7 +321,8 @@ def count_outreach_by_month(result_df):
     
 def plot_growth_officer_events(result_df):
     """
-    Plots the total unique events conducted by each Growth Officer.
+    Plots the total unique events conducted by each Growth Officer
+    and displays the number of events on each bar.
     """
     # Calculate the total unique events conducted by each Growth Officer
     growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
@@ -333,7 +334,7 @@ def plot_growth_officer_events(result_df):
     fig, ax = plt.subplots(figsize=(12, 6))
 
     # Plot the bar chart
-    ax.bar(growth_officer_total_events['Growth Officer'], growth_officer_total_events['Total Unique Events'], color='skyblue')
+    growth_officer_total_events.plot(kind='bar', x='Growth Officer', y='Total Unique Events', ax=ax, color='skyblue')
 
     # Add labels and title
     ax.set_xlabel("Growth Officer", fontsize=12)
@@ -343,13 +344,9 @@ def plot_growth_officer_events(result_df):
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
     # Annotate each bar with the number of events
-    for bar in bars:
-        height = bar.get_height()  # Get the height of the bar
-        ax.annotate(f'{height}',  # Annotate with the height value (number of events)
-                    xy=(bar.get_x() + bar.get_width() / 2, height),  # Positioning the annotation
-                    xytext=(0, 3),  # Slightly offset the text vertically
-                    textcoords='offset points',
-                    ha='center', va='bottom', fontsize=10, color='black')
+    for idx, row in growth_officer_total_events.iterrows():
+        ax.text(row.name, row['Total Unique Events'] + 0.2, str(row['Total Unique Events']),
+                ha='center', va='bottom', fontsize=10, color='black')
 
     # Use Streamlit to display the plot
     st.pyplot(fig)
