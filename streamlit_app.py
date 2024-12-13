@@ -342,14 +342,38 @@ def generate_date_range_report(result_df):
 # Streamlit app UI
 def main():
     st.markdown(
-    """
-    <div style='text-align: center;'>
-        <h1 style='font-size: 2.5rem; font-weight: bold;'>Data Processing Platform</h1>
-        <h4 style='font-size: 1.5rem; color: grey; font-style: italic;'>From Raw to Ready!</h4>
-    </div>
-    """,
-    unsafe_allow_html=True
+        """
+        <style>
+        /* Change the background color of the file upload section */
+        .upload-section {
+            background-color: #f0f0f0;  /* Light Grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* Change the color of the header */
+        .header-text {
+            color: #001f3d;  /* Navy Blue color */
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    
+        /* Style for the subheading */
+        .subheading-text {
+            color: grey;
+            font-size: 1.5rem;
+            font-style: italic;
+            text-align: center;
+        }
+        </style>
+        """, unsafe_allow_html=True
     )
+    # Header with navy blue color and subheading
+    st.markdown('<div class="header-text">Data Processing Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subheading-text">From Raw to Ready!</div>', unsafe_allow_html=True)
+
 
     st.write("Please submit the following files and make sure they are in the correct format: CSV and/or XLSX only.")
      # File upload
