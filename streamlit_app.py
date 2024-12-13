@@ -341,13 +341,16 @@ def generate_date_range_report(result_df):
 
 # Streamlit app UI
 def main():
-    st.title("File Upload and Processing")
     st.markdown(
     """
-    <h1 style='text-align: center; font-size: 2.5rem; font-weight: bold;'>File Upload and Processing</h1>
+    <div style='text-align: center;'>
+        <h1 style='font-size: 2.5rem; font-weight: bold;'>Data Processing Platform</h1>
+        <h3 style='font-size: 1.5rem; color: grey; font-style: italic;'>From Raw to Ready</h3>
+    </div>
     """,
     unsafe_allow_html=True
     )
+
     st.write("Please submit the following files and make sure they are in the correct format: CSV and/or XLSX only.")
      # File upload
     member_outreach_file = st.file_uploader("Upload Member Outreach File (CSV/XLSX)", type=["csv", "xlsx"])
@@ -356,11 +359,38 @@ def main():
     approved_file = st.file_uploader("Upload Approved File (CSV/XLSX)", type=["csv", "xlsx"])
     
     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
-        if st.button("Clean Data"):
-            result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
-            st.success("Data cleaned successfully!")
-            st.write("Cleaned Dataset")
-            st.write(result_df)
+        st.markdown(
+            """
+            <style>
+            .center-button {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+            .center-button button {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .center-button button:hover {
+            background-color: #0056b3;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+        col1, col2, col3 = st.columns([1, 2, 1])  # To ensure centering
+        with col2:
+            if st.button("Clean Data", key="clean_data"):
+                result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
+                st.success("Data cleaned successfully!")
+                st.write("Cleaned Dataset")
+                st.write(result_df)
             
             st.header("Basic Analysis of the Data Uploaded")
             generate_date_range_report(result_df)
