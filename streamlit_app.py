@@ -368,12 +368,12 @@ def main():
                 margin-top: 20px;
             }
             .center-button button {
-                font-size: 1.5rem;
-                padding: 15px 30px;
+                font-size: 2.5rem;
+                padding: 25px 40px;
                 background-color: #007BFF;
                 color: white;
                 border: none;
-                border-radius: 8px;
+                border-radius: 12px;
                 cursor: pointer;
                 transition: background-color 0.3s;
             }
