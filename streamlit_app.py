@@ -368,13 +368,14 @@ def main():
                 margin-top: 20px;
             }
             .center-button button {
-                font-size: 1.2rem;
-                padding: 10px 20px;
+                font-size: 1.5rem;
+                padding: 15px 30px;
                 background-color: #007BFF;
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 8px;
                 cursor: pointer;
+                transition: background-color 0.3s;
             }
             .center-button button:hover {
             background-color: #0056b3;
@@ -384,7 +385,7 @@ def main():
             unsafe_allow_html=True
         )
 
-        col1, col2, col3 = st.columns([1, 1, 1])  # To ensure centering
+        col1, col2, col3 = st.columns([1, 1, 0])  # To ensure centering
         with col2:
             if st.button("Clean Data", key="clean_data"):
                 result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
