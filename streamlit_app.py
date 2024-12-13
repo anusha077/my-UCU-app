@@ -357,95 +357,94 @@ def main():
     event_debrief_file = st.file_uploader("Upload Event Debrief File (CSV/XLSX)", type=["csv", "xlsx"])
     submitted_file = st.file_uploader("Upload Submitted File (CSV/XLSX)", type=["csv", "xlsx"])
     approved_file = st.file_uploader("Upload Approved File (CSV/XLSX)", type=["csv", "xlsx"])
-    
-     if member_outreach_file and event_debrief_file and submitted_file and approved_file:
-         if st.button("Hit to Clean Data"):
-             result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
-             st.success("Hurray! Data cleaned successfully!")
-             st.write("Cleaned Dataset")
+    if member_outreach_file and event_debrief_file and submitted_file and approved_file:
+        if st.button("Hit to Clean Data"):
+            result_df, temp_file_path = process_files(member_outreach_file, event_debrief_file, submitted_file, approved_file)
+            st.success("Hurray! Data cleaned successfully!")
+            st.write("Cleaned Dataset")
             #st.write(result_df)
             
-             st.header("Basic Analysis of the Data Uploaded")
-             generate_date_range_report(result_df)
+            st.header("Basic Analysis of the Data Uploaded")
+            generate_date_range_report(result_df)
             
              # Outreach Name Count Summary
-             st.subheader("Outreach Signup and Application Submissions Summary")
+            st.subheader("Outreach Signup and Application Submissions Summary")
             
-             total_outreach_count = result_df['outreach_Name'].notna().sum()
-             st.write(f"Total Outreach Signups: {total_outreach_count}")
+            total_outreach_count = result_df['outreach_Name'].notna().sum()
+            st.write(f"Total Outreach Signups: {total_outreach_count}")
             
-             outreach_name_counts = result_df['outreach_Name'].value_counts()
-             only_once = (outreach_name_counts == 1).sum()
-             only_twice = (outreach_name_counts == 2).sum()
-             more_than_twice = (outreach_name_counts > 2).sum()
+            outreach_name_counts = result_df['outreach_Name'].value_counts()
+            only_once = (outreach_name_counts == 1).sum()
+            only_twice = (outreach_name_counts == 2).sum()
+            more_than_twice = (outreach_name_counts > 2).sum()
 
-             st.write(f"Count of customer outreached once: {only_once}")
-             st.write(f"Count of customer outreached twice: {only_twice}")
-             st.write(f"Count of customer outreached more than twice: {more_than_twice}")
+            st.write(f"Count of customer outreached once: {only_once}")
+            st.write(f"Count of customer outreached twice: {only_twice}")
+            st.write(f"Count of customer outreached more than twice: {more_than_twice}")
 
-             filled_applications_count = result_df['submitted_status'].notna().sum()
-             st.write(f"Total Filled Applications: {filled_applications_count}")
+            filled_applications_count = result_df['submitted_status'].notna().sum()
+            st.write(f"Total Filled Applications: {filled_applications_count}")
 
             # Growth Officer Report
-             st.subheader("Growth Officer's Report")
-             growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
-             st.write("Number of outreaches assigned to each Growth Officer:")
-             st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
+            st.subheader("Growth Officer's Report")
+            growth_officer_counts = result_df.groupby('outreach_Growth Officer')['outreach_Name'].count()
+            st.write("Number of outreaches assigned to each Growth Officer:")
+            st.dataframe(growth_officer_counts.rename("Customer Count").reset_index())
 
             # Growth Officer by Event Report
-             growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
-             st.write("Growth Officers assigned to each Event:")
-             st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
+            growth_officer_by_event = result_df.groupby('outreach_event_name')['outreach_Growth Officer'].nunique()
+            st.write("Growth Officers assigned to each Event:")
+            st.dataframe(growth_officer_by_event.rename("Growth Officers Count").reset_index())
 
             # Calculate the total unique events conducted by each Growth Officer
-             growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
+            growth_officer_total_events = result_df.groupby('outreach_Growth Officer')['outreach_event_name'].nunique().reset_index()
 
             # Rename columns for clarity
-             growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
+            growth_officer_total_events.columns = ['Growth Officer', 'Total Unique Events']
 
             # Display the results
-             st.write("Total Events Conducted by Each Growth Officer")
-             st.write(growth_officer_total_events)
+            st.write("Total Events Conducted by Each Growth Officer")
+            st.write(growth_officer_total_events)
 
-             st.subheader("Plot of outreaches per month") 
-             count_outreach_by_month(result_df)
+            st.subheader("Plot of outreaches per month") 
+            count_outreach_by_month(result_df)
             # Step 5: Any additional steps or final output
-             st.write("\nReport generation completed.")
+            st.write("\nReport generation completed.")
 
             # Convert the current timestamp to PST
-             now_utc = datetime.now(pytz.utc)
-             now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
-             formatted_pacific_time = now_pacific.strftime('%Y%m%d_%H%M%S')
+            now_utc = datetime.now(pytz.utc)
+            now_pacific = now_utc.astimezone(pytz.timezone('US/Pacific'))
+            formatted_pacific_time = now_pacific.strftime('%Y%m%d_%H%M%S')
             
             # Option to download the result as CSV
-             st.header("Download Processed Data")
-             st.download_button(
-                 label="Download CSV",
-                 data=open(temp_file_path, 'rb').read(),
-                 file_name=f"UCU_{formatted_pacific_time}.csv",
-                 mime="text/csv"
-             )
+            st.header("Download Processed Data")
+            st.download_button(
+                label="Download CSV",
+                data=open(temp_file_path, 'rb').read(),
+                file_name=f"UCU_{formatted_pacific_time}.csv",
+                mime="text/csv"
+            )
             
             # Upload to Google Drive with PST timestamp
-             st.header("Upload to Google Drive")
+            st.header("Upload to Google Drive")
             
             # File with a timestamp in PST
-             file_id, file_link = upload_to_drive(
-                 temp_file_path, 
-                 f"UCU_{formatted_pacific_time}.csv", 
-                 folder_id
-             )
-             if file_id:
-                 st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
+            file_id, file_link = upload_to_drive(
+                temp_file_path, 
+                f"UCU_{formatted_pacific_time}.csv", 
+                folder_id
+            )
+            if file_id:
+                st.write(f"File uploaded to Google Drive with timestamp: [Link to File](https://drive.google.com/file/d/{file_id}/view)")
             
              # File with a fixed name
-             file_id_2, file_link_2 = upload_to_drive(
-                 temp_file_path, 
-                 "UCU_Dashboard_linked.csv", 
-                 folder_id
-             )
-             if file_id_2:
-                 st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
+            file_id_2, file_link_2 = upload_to_drive(
+                temp_file_path, 
+                "UCU_Dashboard_linked.csv", 
+                folder_id
+            )
+            if file_id_2:
+                st.write(f"File also saved as 'UCU_Dashboard_linked.csv': [Link to File](https://drive.google.com/file/d/{file_id_2}/view)")
 
 
 if __name__ == "__main__":
